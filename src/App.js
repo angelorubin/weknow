@@ -18,12 +18,16 @@ export const App = () => {
     const description = e.currentTarget.previousElementSibling.value;
     console.log(description);
 
-    const addProduct = async () =>
-      await http.post("/products", { id: uuidv4(), description });
+    http.post("/products", { id: uuidv4(), description });
 
-    addProduct();
+    const getProducts = async () => {
+      await http("/products").then((resp) => {
+        const { data } = resp;
+        setProducts([...data]);
+      });
+    };
 
-    http("/products").then((resp) => setProducts([...products, resp.data]));
+    getProducts().then();
   };
 
   const handleDeleteClick = async (e) => {
@@ -48,7 +52,7 @@ export const App = () => {
         {products ? (
           products.map((product) => (
             <S.ProductGroup key={product.id}>
-              <h4>Description: {product.description}</h4>
+              <p>Description: {product.description}</p>
               <S.DeleteButton onClick={handleDeleteClick} id={product.id}>
                 deletar
               </S.DeleteButton>
