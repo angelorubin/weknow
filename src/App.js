@@ -14,27 +14,24 @@ export const App = () => {
     fetchData();
   }, []);
 
-  const handleRegisterClick = (e) => {
+  const handleRegisterProduct = async (e) => {
     const description = e.currentTarget.previousElementSibling.value;
-    console.log(description);
 
-    http.post("/products", { id: uuidv4(), description });
+    await http.post("/products", { id: uuidv4(), description });
 
-    const getProducts = async () => {
-      await http("/products").then((resp) => {
-        const { data } = resp;
-        setProducts([...data]);
-      });
-    };
-
-    getProducts().then();
+    await http("/products").then((resp) => {
+      const { data } = resp;
+      setProducts([...data]);
+    });
   };
 
-  const handleDeleteClick = async (e) => {
+  const handleDeleteProduct = async (e) => {
     const id = e.currentTarget.id;
     await http.delete(`/products/${id}`);
-    const getProducts = http("/products").then((products) => products);
-    console.log(getProducts());
+    await http("/products").then((resp) => {
+      const { data } = resp;
+      setProducts([...data]);
+    });
   };
 
   return (
@@ -45,7 +42,7 @@ export const App = () => {
       <main>
         <label htmlFor="description">descrição</label>
         <input name="description" type="text" />
-        <button onClick={handleRegisterClick}>cadastrar</button>
+        <button onClick={handleRegisterProduct}>cadastrar</button>
         <hr />
         <h1>Produtos Cadastrados</h1>
         {JSON.stringify(products)}
@@ -53,7 +50,7 @@ export const App = () => {
           products.map((product) => (
             <S.ProductGroup key={product.id}>
               <p>Description: {product.description}</p>
-              <S.DeleteButton onClick={handleDeleteClick} id={product.id}>
+              <S.DeleteButton onClick={handleDeleteProduct} id={product.id}>
                 deletar
               </S.DeleteButton>
             </S.ProductGroup>
