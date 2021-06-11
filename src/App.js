@@ -46,16 +46,14 @@ export const App = () => {
         <h1>Produtos Cadastrados</h1>
         {JSON.stringify(products)}
         {products ? (
-          products.map((product) => {
-            return (
-              <S.ProductGroup key={product.id}>
-                <h4>{product.description}</h4>
-                <S.DeleteButton onClick={handleDeleteClick} id={product.id}>
-                  deletar
-                </S.DeleteButton>
-              </S.ProductGroup>
-            );
-          })
+          products.map((product) => (
+            <S.ProductGroup key={product.id}>
+              <h4>Description: {product.description}</h4>
+              <S.DeleteButton onClick={handleDeleteClick} id={product.id}>
+                deletar
+              </S.DeleteButton>
+            </S.ProductGroup>
+          ))
         ) : (
           <h1>Nenhum produto cadastrado</h1>
         )}
